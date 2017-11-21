@@ -53,23 +53,26 @@ class ReplayMemory(object):
         return len(self.memory)
 
 class Net(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
+    def __init__(self):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.fc1 = nn.Linear(4, 128)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, num_classes)
+        self.fc2 = nn.Linear(128, 128)
+        self.fc_output = nn.Linear(128, 2)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        hidden = self.relu(self.fc1(x))
-        return self.sigmoid(self.fc2(hidden))
+        hidden1 = self.relu(self.fc1(x))
+        hidden2 = self.relu(self.fc2(hidden1))
+        output = self.sigmoid(self.fc_output(hidden2))
+        return output
 
-model = Net(4, 30, 2)
+model = Net()
 
 BATCH_SIZE = 128
 GAMMA = 0.999
-EPS_START = 0.9
-EPS_END = 0.05
+EPS_START = 0.2
+EPS_END = 0.001
 EPS_DECAY = 200
 
 optimizer = optim.Adam(model.parameters())
@@ -81,8 +84,7 @@ def select_action(state):
     global steps_done
     # Epsilon greedy with cool decay
     sample = random.random()
-    eps_threshold = EPS_END + (EPS_START - EPS_END) * \
-        math.exp(-1. * steps_done / EPS_DECAY)
+    eps_threshold = EPS_END + (EPS_START - EPS_END) * math.exp(-1. * steps_done / EPS_DECAY)
     steps_done += 1
 
     if sample > eps_threshold:
@@ -137,9 +139,9 @@ def optimize_model():
     #     param.grad.data.clamp_(-1, 1)
     optimizer.step()
 
-# Run for 10 episodes
-num_episodes = 1000
-for i_episode in range(num_episodes):
+# Internet said that 200 is good value for this
+max_duration = 0
+while max_duration < 200:
     state = torch.from_numpy(np.ascontiguousarray(env.reset(), dtype=np.float32))
     for t in count():
         # Select and perform an action
@@ -159,6 +161,7 @@ for i_episode in range(num_episodes):
         # Perform one step of the optimization (on the target network)
         optimize_model()
         if done:
+            max_duration = t + 1
             episode_durations.append(t + 1)
             pickle.dump(episode_durations, open(file_name, 'wb'))
             break

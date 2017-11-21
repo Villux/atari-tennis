@@ -1,7 +1,9 @@
 import gym
 import math
 import random
+import datetime
 import numpy as np
+import pickle
 import matplotlib
 import matplotlib.pyplot as plt
 from collections import namedtuple
@@ -14,6 +16,11 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.autograd import Variable
 import torchvision.transforms as T
+
+# File name
+fmt = '%Y%m%d%H%M%S'
+stamp = datetime.datetime.now().strftime(fmt)
+file_name = 'episode_durations' + stamp + '.p'
 
 env = gym.make('CartPole-v0')
 
@@ -130,22 +137,6 @@ def optimize_model():
     #     param.grad.data.clamp_(-1, 1)
     optimizer.step()
 
-def plot_durations():
-    plt.figure(2)
-    plt.clf()
-    durations_t = torch.FloatTensor(episode_durations)
-    plt.title('Training...')
-    plt.xlabel('Episode')
-    plt.ylabel('Duration')
-    plt.plot(durations_t.numpy())
-    # Take 100 episode averages and plot them too
-    if len(durations_t) >= 100:
-        means = durations_t.unfold(0, 100, 1).mean(1).view(-1)
-        means = torch.cat((torch.zeros(99), means))
-        plt.plot(means.numpy())
-
-    plt.pause(0.001)  # pause a bit so that plots are updated
-
 # Run for 10 episodes
 num_episodes = 1000
 for i_episode in range(num_episodes):
@@ -169,7 +160,6 @@ for i_episode in range(num_episodes):
         optimize_model()
         if done:
             episode_durations.append(t + 1)
-            plot_durations()
+            pickle.dump(episode_durations, open(file_name, 'wb'))
             break
-
 env.close()

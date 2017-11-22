@@ -74,9 +74,10 @@ class DQN():
         self.episode_durations = []
         self.last_sync = 0
         self.max_episodes = max_episodes
+        self.steps_done = 0
 
     def get_epsilon(self, t):
-        return max(self.eps_min, min(self.eps_max, 1.0 - math.log10((t + 1) * self.eps_decay)))
+        return self.eps_min + (self.eps_max - self.eps_min) * math.exp(-1. * self.steps_done / self.eps_decay)
 
     def select_action(self, state, t):
         if random.random() > self.get_epsilon(t):
@@ -116,7 +117,7 @@ class DQN():
 
     def run(self):
         scores = deque(maxlen=100)
-        while len(scores) is 0 or np.mean(scores) < 195:
+        while len(scores) is 0 or np.mean(scores) < 185:
             state = torch.from_numpy(np.ascontiguousarray(self.env.reset(), dtype=np.float32))
             for t in count():
                 action = self.select_action(state, len(self.episode_durations))
@@ -130,6 +131,7 @@ class DQN():
                 state = next_state
                 self.optimize_model()
 
+                self.steps_done += 1
                 if done:
                     duration = t + 1
                     self.episode_durations.append(duration)
@@ -146,8 +148,8 @@ if __name__ == '__main__':
     dqn_model = Net()
     dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=0.01, weight_decay=0.01)
 
-    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=64, gamma=0.99, eps_max=1, eps_min=0.01,
-              eps_decay=0.999, model=dqn_model, replay_memory=ReplayMemory(10000), optimizer=dqn_optimizer)
+    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=128, gamma=0.99, eps_max=1, eps_min=0.01,
+              eps_decay=200, model=dqn_model, replay_memory=ReplayMemory(100000), optimizer=dqn_optimizer)
 
     dqn.run()
     print(len(dqn.episode_durations))

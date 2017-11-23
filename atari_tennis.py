@@ -4,8 +4,10 @@ import random
 import datetime
 import numpy as np
 import pickle
+import argparse
 import matplotlib
 import matplotlib.pyplot as plt
+from textwrap import wrap
 from collections import namedtuple, deque
 from itertools import count
 from copy import deepcopy
@@ -18,9 +20,11 @@ from torch.autograd import Variable
 import torchvision.transforms as T
 
 # File name
-fmt = '%Y%m%d%H%M%S'
+fmt = '%Y-%m-%d_%H:%M:%S'
 stamp = datetime.datetime.now().strftime(fmt)
 file_name = 'episode_durations' + stamp + '.p'
+img_name = 'figure_' + stamp + '.png'
+avg_action = 'avg_action' + stamp + '.p'
 
 # Disable cuda for now
 use_cuda = False
@@ -28,6 +32,12 @@ FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
 ByteTensor = torch.cuda.ByteTensor if use_cuda else torch.ByteTensor
 Tensor = FloatTensor
+
+def parse_cl_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-k", help="skip k number of frames", type=int, default=0)
+    parser.add_argument("--save", help="save episode durations", action='store_true')
+    return parser.parse_args()
 
 Transition = namedtuple('Transition',
                         ('state', 'action', 'next_state', 'reward'))
@@ -59,15 +69,25 @@ class Net(nn.Module):
         output = self.fc_output(hidden2)
         return output
 
+class EpsilonGreedy():
+    def __init__(self, eps_max, eps_min, decay):
+        self.max = eps_max
+        self.min = eps_min
+        self.decay = decay
+
+    def get_epsilon(self, steps):
+        return self.min + (self.max - self.min) * math.exp(-1. * steps / self.decay)
+
+    def __str__(self):
+        return 'EPSILON GREEDY: min:' + str(self.min) + ' max:' + str(self.max) + ' decay:' + str(self.decay)
+
 class DQN():
-    def __init__(self, env, batch_size, gamma, eps_max, eps_min,
-                 eps_decay, model, replay_memory, optimizer, max_episodes=200):
+    def __init__(self, env, batch_size, gamma, eps_greedy, model, replay_memory, optimizer,
+                 max_episodes=200, save_episodes=False, skip_k=0, max_iter=1000):
         self.env = env
         self.batch_size = batch_size
         self.gamma = gamma
-        self.eps_max = eps_max
-        self.eps_min = eps_min
-        self.eps_decay = eps_decay
+        self.eps_greedy = eps_greedy
         self.model = model
         self.replay_memory = replay_memory
         self.optimizer = optimizer
@@ -75,13 +95,21 @@ class DQN():
         self.last_sync = 0
         self.max_episodes = max_episodes
         self.steps_done = 0
+        self.save_episodes = save_episodes
+        self.skip_k = skip_k
+        # For stopping condition
+        self.action_queue = deque(maxlen=1000)
+        self.action_values = []
+        self.max_iter = max_iter
 
-    def get_epsilon(self, t):
-        return self.eps_min + (self.eps_max - self.eps_min) * math.exp(-1. * self.steps_done / self.eps_decay)
+    def __str__(self):
+        return 'DQN: batch_size:' + str(self.batch_size) + ' gamma:' + str(self.gamma) + ' k:' + str(self.skip_k)
 
     def select_action(self, state, t):
-        if random.random() > self.get_epsilon(t):
-            return self.model(Variable(state, volatile=True).type(FloatTensor)).data.max(0)[1].view(1, 1)
+        if random.random() > self.eps_greedy.get_epsilon(t):
+            actions = self.model(Variable(state, volatile=True).type(FloatTensor)).data
+            self.action_queue.append(actions.max())
+            return actions.max(0)[1].view(1, 1)
         else:
             return LongTensor([[random.randrange(2)]])
 
@@ -113,44 +141,81 @@ class DQN():
         # Optimize the model
         self.optimizer.zero_grad()
         loss.backward()
+        # for param in self.model.parameters():
+        #     param.grad.data.clamp_(-1, 1)
         self.optimizer.step()
+
+    def handle_episode_results(self, duration):
+        avg_action_value = np.mean(self.action_queue)
+        self.episode_durations.append(duration)
+        self.action_values.append(avg_action_value)
+        if self.save_episodes:
+            pickle.dump(self.episode_durations, open(file_name, 'wb'))
+            pickle.dump(self.action_values, open(avg_action, 'wb'))
+
+        # if len(self.episode_durations) % 20 == 0:
+        #     print(avg_action_value)
+
 
     def run(self):
         scores = deque(maxlen=100)
-        while len(scores) is 0 or np.mean(scores) < 185:
+        for i in range(self.max_iter):
             state = torch.from_numpy(np.ascontiguousarray(self.env.reset(), dtype=np.float32))
             for t in count():
-                action = self.select_action(state, len(self.episode_durations))
-                next_state, reward, done, _ = self.env.step(action[0, 0])
-                next_state = torch.from_numpy(np.ascontiguousarray(next_state, dtype=np.float32))
+                if self.skip_k and (t % self.skip_k):
+                    _, _, done, _ = self.env.step(action[0, 0])
+                else:
+                    action = self.select_action(state, len(self.episode_durations))
+                    next_state, reward, done, _ = self.env.step(action[0, 0])
+                    next_state = torch.from_numpy(np.ascontiguousarray(next_state, dtype=np.float32))
+
+                    if done:
+                        next_state = None
+
+                    self.replay_memory.push(state, action, next_state, Tensor([reward]))
+                    state = next_state
+                    self.optimize_model()
+
+                    self.steps_done += 1
 
                 if done:
-                    next_state = None
-
-                self.replay_memory.push(state, action, next_state, Tensor([reward]))
-                state = next_state
-                self.optimize_model()
-
-                self.steps_done += 1
-                if done:
-                    duration = t + 1
-                    self.episode_durations.append(duration)
-                    scores.append(duration)
-                    # pickle.dump(self.episode_durations, open(file_name, 'wb'))
-                    if np.mean(scores) > 40:
-                        print(np.mean(scores))
+                    score = t+1
+                    self.handle_episode_results(score)
+                    scores.append(score)
                     break
+
+            if np.mean(scores) >= 195 and i >= 100:
+                return i
+
+
         self.env.close()
 
 
 
 if __name__ == '__main__':
-    dqn_model = Net()
-    dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=0.01, weight_decay=0.01)
+    args = parse_cl_args()
 
-    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=128, gamma=0.99, eps_max=1, eps_min=0.01,
-              eps_decay=200, model=dqn_model, replay_memory=ReplayMemory(100000), optimizer=dqn_optimizer)
+    dqn_model = Net()
+    lr=0.0003
+    dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=lr)
+    dqn_eps = EpsilonGreedy(eps_max=1, eps_min=0.01, decay=200)
+
+    max_iter = 1000
+    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=64, gamma=0.99, eps_greedy=dqn_eps,
+              model=dqn_model, replay_memory=ReplayMemory(100000),
+              optimizer=dqn_optimizer, save_episodes=args.save, skip_k=args.k, max_iter=max_iter)
 
     dqn.run()
-    print(len(dqn.episode_durations))
+
+    fig, ax = plt.subplots()
+    x = list(range(len(dqn.episode_durations)))
+    ax.plot(x, dqn.episode_durations)
+    ax.set_title("\n".join(wrap(str(dqn_eps) + str(dqn), 60)))
+    plt.savefig(img_name)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, dqn.action_values)
+    ax.set_title("\n".join(wrap(str(dqn_eps) + str(dqn) + "OPT lr: " + str(lr), 60)))
+
+    plt.savefig("avg_action_" + img_name)
 

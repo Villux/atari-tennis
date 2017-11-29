@@ -55,9 +55,9 @@ class ReplayMemory(object):
     def __len__(self):
         return len(self.memory)
 
-class Net(nn.Module):
+class DqnNet(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
+        super(DqnNet, self).__init__()
         self.fc1 = nn.Linear(4, 24)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(24, 48)
@@ -195,7 +195,7 @@ class DQN():
 if __name__ == '__main__':
     args = parse_cl_args()
 
-    dqn_model = Net()
+    dqn_model = DqnNet()
     lr=0.0003
     dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=lr)
     dqn_eps = EpsilonGreedy(eps_max=1, eps_min=0.01, decay=200)

@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# No local files to repo
+local_*/
+
+# No DS_Store
+.DS_Store

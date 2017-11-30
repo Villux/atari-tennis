@@ -66,6 +66,8 @@ class Policy(nn.Module):
 		return action_scores
 
 policy = Policy()
+# policy.cuda()
+# cuda doesn't work :/
 optimizer = optim.Adam(policy.parameters(), lr=1e-2)
 
 

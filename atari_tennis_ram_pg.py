@@ -1,8 +1,10 @@
 import argparse
-import gym
 import numpy as np 
+from itertools import count
 
-
+# OpenaAi-Gym
+import gym
+# PyTorch utilities
 import torch
 import torch.nn as nn
 import torch.nn.functional as F 
@@ -97,25 +99,34 @@ def finish_episode():
 
 
 
-running_reward = 10
-for i_episode in range(40):
+running_reward = -1.0
+
+for i_episode in count(1):
 		# State is the game observation. In this case the ram memory, which is only 1x128x(bytes)
     state = env.reset()
+    final_reward = 0.0
+    # Start a new episode:
     for t in range(10000): # Don't infinite loop while learning
-    		# Forward propagation and action selection:
+    	
+        # Forward propagation and action selection:
         action = select_action(state)
-        # Step with the action:
+        # Evaluate the action
         state, reward, done, _ = env.step(action[0,0])
         if args.render:
             env.render()
 
+
         policy.rewards.append(reward)
         if done:
+            #print("Game over!: Final reward: {}".format(reward))
+            final_reward = reward
             break
 
-    running_reward = running_reward * 0.99 + t * 0.01
+    running_reward = running_reward * 0.99 + final_reward * 0.01
+    #print("Running_reward: {}".format(running_reward))
     finish_episode()
+
     if i_episode % args.log_interval == 0:
-        print('Episode {}\tLast length: {:5d}\tAverage length: {:.2f}'.format(
+        print('Episode {}\t Timesteps: {:5d}\t Running reward: {:.2f}'.format(
             i_episode, t, running_reward))
     

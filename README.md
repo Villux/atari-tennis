@@ -18,6 +18,12 @@ RL Agent to play Atari 2600 Tennis
 	- pip install gym
 	- pip install gym[atari]
 	- pip install ipdb
+    - Install the pytorch for python2.7 and for CUDA 7.5:
+        - pip install http://download.pytorch.org/whl/cu75/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
+        - pip install torchvision 
+        #### if the above command does not work, then you have python 2.7 UCS2, use this command 
+        - pip install http://download.pytorch.org/whl/cu75/torch-0.2.0.post3-cp27-cp27m-manylinux1_x86_64.whl
+        
 2. Easier way 
 	- pip install -r requirement.txt
 

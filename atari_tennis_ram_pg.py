@@ -103,6 +103,8 @@ def finish_episode():
 
 running_reward = -1.0
 
+# Reward is only 1.0 when the tennis game is won, or -1.0 when the tennis is lost
+
 for i_episode in count(1):
 		# State is the game observation. In this case the ram memory, which is only 1x128x(bytes)
     state = env.reset()

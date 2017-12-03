@@ -20,11 +20,12 @@ parser = argparse.ArgumentParser(description='PyTorch implementation of OpenAi-G
 parser.add_argument('--gamma', type=float, default=0.99, metavar='G', help='discount factor (default: 0.99)')
 parser.add_argument('--seed', type=int, default=543, metavar='N', help='random seed (default: 543)')
 parser.add_argument('--render', action='store_true', help='render the environment')
-parser.add_argument('--log_interval', type=int, default=10, metavar='N', help='interval between training status logs (default: 10)')
+parser.add_argument('--log_interval', type=int, default=1, metavar='N', help='interval between training status logs (default: 10)')
 parser.add_argument('--disable-cuda', action='store_true', help='Disable CUDA')
 args = parser.parse_args()
 
 args.cuda = not args.disable_cuda and torch.cuda.is_available()
+args.cuda = False
 
 env = gym.make('Tennis-ram-v0')
 env.seed(args.seed)
@@ -90,7 +91,8 @@ if args.cuda:
 
 def select_action(state):
 	state = torch.from_numpy(state).float().unsqueeze(0)
-	probs = policy(Variable(state))
+        if args.cuda: state = state.cuda()
+        probs = policy(Variable(state))
 
 	# Draw action from the probability distribution of the output. 
 	action = probs.multinomial()
@@ -104,6 +106,7 @@ def finish_episode():
     for r in policy.rewards[::-1]:
         R = r + args.gamma * R
         rewards.insert(0, R)
+
     rewards = torch.Tensor(rewards)
     if args.cuda: rewards = rewards.cuda()
     rewards = (rewards - rewards.mean()) / (rewards.std() + np.finfo(np.float32).eps)
@@ -127,7 +130,7 @@ for i_episode in count(len(episodes)):
     state = env.reset()
     final_reward = 0.0
     # Start a new episode:
-    for t in range(10000): # Don't infinite loop while learning
+    for t in range(30000): # Don't infinite loop while learning
     	
         # Forward propagation and action selection:
         action = select_action(state)
@@ -136,9 +139,7 @@ for i_episode in count(len(episodes)):
         if args.render:
             env.render()
 
-        print("jeeee")
         policy.rewards.append(reward)
-        print("asdkfjalksjdfklajsfd")
         if done:
             #print("Game over!: Final reward: {}".format(reward))
             final_reward = reward
@@ -151,8 +152,8 @@ for i_episode in count(len(episodes)):
     finish_episode()
 
     if i_episode % args.log_interval == 0:
-        print('Episode {}\t Timesteps: {:5d}\t Running reward: {:.2f}'.format(
-            i_episode, t, running_reward))
+        print('Episode {}\t Timesteps: {:5d}\t Reward: {:.2f}\t Running reward: {:.2f}'.format(
+            i_episode, t, final_reward, running_reward))
     if i_episode != 0 and i_episode % 100 == 0:
         torch.save(policy.state_dict(), "save_tennis_ram_model.p")
         torch.save({'running_rewards': running_rewards, 'episodes': episodes}, 'save_tennis_ram_bookkeeping.p')

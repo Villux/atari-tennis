@@ -17,17 +17,14 @@ import os.path
 resume = True
 
 parser = argparse.ArgumentParser(description='PyTorch implementation of OpenAi-Gym Atari 2600 Tennis-ram-v0')
-parser.add_argument('--gamma', type=float, default=0.99, metavar='G',
-                    help='discount factor (default: 0.99)')
-parser.add_argument('--seed', type=int, default=543, metavar='N',
-                    help='random seed (default: 543)')
-parser.add_argument('--render', action='store_true',
-                    help='render the environment')
-parser.add_argument('--log_interval', type=int, default=10, metavar='N',
-                    help='interval between training status logs (default: 10)')
+parser.add_argument('--gamma', type=float, default=0.99, metavar='G', help='discount factor (default: 0.99)')
+parser.add_argument('--seed', type=int, default=543, metavar='N', help='random seed (default: 543)')
+parser.add_argument('--render', action='store_true', help='render the environment')
+parser.add_argument('--log_interval', type=int, default=10, metavar='N', help='interval between training status logs (default: 10)')
+parser.add_argument('--disable-cuda', action='store_true', help='Disable CUDA')
 args = parser.parse_args()
 
-
+args.cuda = not args.disable_cuda and torch.cuda.is_available()
 
 env = gym.make('Tennis-ram-v0')
 env.seed(args.seed)
@@ -69,6 +66,7 @@ class Policy(nn.Module):
 		action_scores = F.softmax(self.affine2(x))
 		return action_scores
 
+print("perse")
 policy = Policy()
 
 episodes = []
@@ -86,15 +84,10 @@ if resume == True and os.path.exists("save_tennis_ram_model.p"):
         #print("Running rewards {}".format(running_rewards))
     
     
-
-
 optimizer = optim.Adam(policy.parameters(), lr=1e-2)
 
-
-
-
-# policy.cuda()
-# cuda doesn't work :/
+if args.cuda:
+    policy.cuda()
 
 def select_action(state):
 	state = torch.from_numpy(state).float().unsqueeze(0)
@@ -113,6 +106,7 @@ def finish_episode():
         R = r + args.gamma * R
         rewards.insert(0, R)
     rewards = torch.Tensor(rewards)
+    if args.cuda: rewards = rewards.cuda()
     rewards = (rewards - rewards.mean()) / (rewards.std() + np.finfo(np.float32).eps)
     for action, r in zip(policy.saved_actions, rewards):
         action.reinforce(r)
@@ -143,8 +137,9 @@ for i_episode in count(len(episodes)):
         if args.render:
             env.render()
 
-
+        print("jeeee")
         policy.rewards.append(reward)
+        print("asdkfjalksjdfklajsfd")
         if done:
             #print("Game over!: Final reward: {}".format(reward))
             final_reward = reward

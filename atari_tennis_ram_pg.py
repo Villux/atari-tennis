@@ -12,7 +12,9 @@ import torch.optim as optim
 import torch.autograd as autograd
 from torch.autograd import Variable
 
+import os.path
 
+resume = True
 
 parser = argparse.ArgumentParser(description='PyTorch implementation of OpenAi-Gym Atari 2600 Tennis-ram-v0')
 parser.add_argument('--gamma', type=float, default=0.99, metavar='G',
@@ -68,10 +70,17 @@ class Policy(nn.Module):
 		return action_scores
 
 policy = Policy()
-# policy.cuda()
-# cuda doesn't work :/
+
+if resume == True and os.path.exists("save_tennis_ram.p"):
+    policy.load_state_dict(torch.load("save_tennis_ram.p"))
+    
 optimizer = optim.Adam(policy.parameters(), lr=1e-2)
 
+
+
+
+# policy.cuda()
+# cuda doesn't work :/
 
 def select_action(state):
 	state = torch.from_numpy(state).float().unsqueeze(0)
@@ -122,7 +131,7 @@ for i_episode in count(1):
 
         policy.rewards.append(reward)
         if done:
-            #print("Game over!: Final reward: {}".format(reward))
+            print("Game over!: Final reward: {}".format(reward))
             final_reward = reward
             break
 
@@ -133,4 +142,7 @@ for i_episode in count(1):
     if i_episode % args.log_interval == 0:
         print('Episode {}\t Timesteps: {:5d}\t Running reward: {:.2f}'.format(
             i_episode, t, running_reward))
+        if i_episode != 0 and i_episode % 10 == 0:
+            torch.save(policy.state_dict(), "save_tennis_ram.p")
+
     

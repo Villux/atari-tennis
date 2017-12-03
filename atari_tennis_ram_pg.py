@@ -71,9 +71,23 @@ class Policy(nn.Module):
 
 policy = Policy()
 
-if resume == True and os.path.exists("save_tennis_ram.p"):
-    policy.load_state_dict(torch.load("save_tennis_ram.p"))
+episodes = []
+running_rewards = []
+
+if resume == True and os.path.exists("save_tennis_ram_model.p"):
+    policy.load_state_dict(torch.load("save_tennis_ram_model.p"))
+    if os.path.exists("save_tennis_ram_bookkeeping.p"):
+        #print("Bookkeeping found!")
+        temp = torch.load("save_tennis_ram_bookkeeping.p")
+        #print("Temp: {}".format(temp))
+        episodes = temp['episodes']
+        running_rewards = temp['running_rewards']
+        #print("Episodes: {}".format(episodes))
+        #print("Running rewards {}".format(running_rewards))
     
+    
+
+
 optimizer = optim.Adam(policy.parameters(), lr=1e-2)
 
 
@@ -112,9 +126,10 @@ def finish_episode():
 
 running_reward = -1.0
 
+
 # Reward is only 1.0 when the tennis game is won, or -1.0 when the tennis is lost
 
-for i_episode in count(1):
+for i_episode in count(len(episodes)):
 		# State is the game observation. In this case the ram memory, which is only 1x128x(bytes)
     state = env.reset()
     final_reward = 0.0
@@ -131,18 +146,22 @@ for i_episode in count(1):
 
         policy.rewards.append(reward)
         if done:
-            print("Game over!: Final reward: {}".format(reward))
+            #print("Game over!: Final reward: {}".format(reward))
             final_reward = reward
             break
 
     running_reward = running_reward * 0.99 + final_reward * 0.01
+    episodes.append(i_episode)
+    running_rewards.append(running_reward)
     #print("Running_reward: {}".format(running_reward))
     finish_episode()
 
     if i_episode % args.log_interval == 0:
         print('Episode {}\t Timesteps: {:5d}\t Running reward: {:.2f}'.format(
             i_episode, t, running_reward))
-        if i_episode != 0 and i_episode % 10 == 0:
-            torch.save(policy.state_dict(), "save_tennis_ram.p")
+    if i_episode != 0 and i_episode % 100 == 0:
+        torch.save(policy.state_dict(), "save_tennis_ram_model.p")
+        torch.save({'running_rewards': running_rewards, 'episodes': episodes}, 'save_tennis_ram_bookkeeping.p')
+
 
     

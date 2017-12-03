@@ -66,7 +66,6 @@ class Policy(nn.Module):
 		action_scores = F.softmax(self.affine2(x))
 		return action_scores
 
-print("perse")
 policy = Policy()
 
 episodes = []

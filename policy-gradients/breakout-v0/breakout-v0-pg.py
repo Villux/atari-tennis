@@ -35,7 +35,8 @@ epsilon = 1.0
 
 input_layer_size = 45*72
 output_layer_size = 4
-hidden_layer_size = 20
+hidden_layer1_size = 256
+hidden_layer2_size = 64
 
 
 class Policy(nn.Module):
@@ -45,8 +46,9 @@ class Policy(nn.Module):
         # In neural networks the b denotes bias.
 
         # In other words self.affine1 and self.affine2 are the weight matrices between the layers.
-        self.affine1 = nn.Linear(input_layer_size, hidden_layer_size)
-        self.affine2 = nn.Linear(hidden_layer_size, output_layer_size)
+        self.affine1 = nn.Linear(input_layer_size, hidden_layer1_size)
+        self.affine2 = nn.Linear(hidden_layer1_size, hidden_layer2_size)
+        self.affine3 = nn.Linear(hidden_layer2_size, output_layer_size)
 
         # Policy gradient needs to store actions and rewards to calculate the backpropagation
         self.saved_actions = []
@@ -63,12 +65,14 @@ class Policy(nn.Module):
         # Logistic and hyperbolic tangent activation functions suffer from vanishing gradient problem,  
         # which makes learning increasingly slower. 
         x = F.relu(self.affine1(x))
+        x = F.relu(self.affine2(x))
+
 
         # The hidden layer is multiplied by the second weight matrix self.affine2.
         # The activation function is softmax function, which is a sigmoid function, but 
         # the terms of the vector are normalized so that the sum of the terms of the vector action_scores = 1.
         
-        action_scores = self.affine2(x)
+        action_scores = self.affine3(x)
         return F.softmax(action_scores)
 
 
@@ -96,7 +100,7 @@ if resume == True and os.path.exists("save_breakout_model.p"):
         temp = torch.load("save_breakout_bookkeeping.p")
         episodes = temp['episodes']
         running_rewards = temp['running_rewards']
-        running_rewad = running_rewards[-1]
+        running_reward = running_rewards[-1]
     
     
 optimizer = optim.Adam(policy.parameters(), lr=1e-2)
@@ -113,9 +117,9 @@ def select_action(state):
     
     action = probs.multinomial()
     #import pdb; pdb.set_trace()   
-    if np.random.rand() < epsilon:
-        uniform_dist = Variable(torch.Tensor([[1,1,1,1]]), requires_grad=True)
-        action = torch.multinomial(uniform_dist, 1)
+    #if np.random.rand() < epsilon:
+    #    uniform_dist = Variable(torch.Tensor([[1,1,1,1]]), requires_grad=True)
+    #    action = torch.multinomial(uniform_dist, 1)
 
     policy.saved_actions.append(action)
     return action.data
@@ -145,7 +149,7 @@ state = env.reset()
 
 print(env.unwrapped.get_action_meanings())
 reward_sum = 0
-previous_state = None
+previous_state = np.zeros(input_layer_size)
 episode_number = len(episodes)
 frame = 0
 
@@ -153,11 +157,14 @@ while True:
     if args.render: env.render()
 
     current_state = preprocess_state(state)
-    state = current_state if previous_state is not None else np.zeros(input_layer_size)
+    state = current_state - previous_state
     previous_state = current_state
 
     action = select_action(state)
     state, reward, done, _ = env.step(action[0,0])
+
+    #if done and reward == 0:
+        #reward = -1.0
 
     reward_sum += reward
     policy.rewards.append(reward)
@@ -165,21 +172,24 @@ while True:
 
     if done: 
         episode_number += 1
+
         finish_episode()
 
-        print("Epsilon: {}".format(epsilon))
-
-        if running_reward is None:
+        if running_reward == None:
             running_reward = reward_sum
         else:
             running_reward = 0.99 * running_reward + 0.01 * reward_sum
 
-        print("Episode: {}. Number of frames: {}. Resetting the environment. Episode reward total was {}. Running mean: {}".format(episode_number, frame,reward_sum, running_reward))
+        print("Episode: {}. Epsilon: {}. Number of frames: {}. Resetting the environment. Episode reward total was {}. Running mean: {}".format(episode_number, epsilon, frame,reward_sum, running_reward))
 
         episodes.append(episode_number)
         running_rewards.append (running_reward)
-        if episode_number % 10:
-            epsilon = epsilon * 0.99
+        #if episode_number % 10:
+        #    epsilon = 1.0 / np.log(episode_number)
+
+
+
+
 
         if episode_number != 0 and episode_number % 100 == 0:
             torch.save(policy.state_dict(), "save_breakout_model.p")
@@ -194,6 +204,6 @@ while True:
 
 
     if reward != 0:
-        print("Ep. {}. Frame: {}. Round finished!, reward: {}".format(episode_number, frame, reward))
+        print("Ep. {}. Frame: {}. Reward: {}".format(episode_number, frame, reward))
 
 

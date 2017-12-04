@@ -37,6 +37,9 @@ def parse_cl_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-k", help="skip k number of frames", type=int, default=0)
     parser.add_argument("--save", help="save episode durations", action='store_true')
+    parser.add_argument("-l", help="set learning rate", type=float, default=0.0001)
+    parser.add_argument("-d", help="set epsilon greedy's decay", type=float, default=0.01)
+    parser.add_argument("--epoch", help="number of epochs", type=int, default=1000)
     return parser.parse_args()
 
 Transition = namedtuple('Transition',
@@ -58,10 +61,10 @@ class ReplayMemory(object):
 class DqnNet(nn.Module):
     def __init__(self):
         super(DqnNet, self).__init__()
-        self.fc1 = nn.Linear(4, 24)
+        self.fc1 = nn.Linear(128, 24)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(24, 24)
-        self.fc_output = nn.Linear(24, 2)
+        self.fc_output = nn.Linear(24, 6)
 
     def forward(self, x):
         hidden1 = self.relu(self.fc1(x))
@@ -123,7 +126,7 @@ class DQN():
             self.action_queue.append(actions.max())
             return actions.max(0)[1].view(1, 1)
         else:
-            return LongTensor([[random.randrange(2)]])
+            return LongTensor([[random.randrange(6)]])
 
     def optimize_model(self):
         transitions = self.replay_memory.get_minibatch(self.batch_size)
@@ -165,17 +168,21 @@ class DQN():
             pickle.dump(self.episode_durations, open(file_name, 'wb'))
             pickle.dump(self.action_values, open(avg_action, 'wb'))
 
-        # if len(self.episode_durations) % 20 == 0:
-        #     print(avg_action_value)
+        print("--------------")
+        print(avg_action_value)
+        print(np.mean(self.episode_durations))
+
 
 
     def run(self):
         scores = deque(maxlen=100)
         for i in range(self.max_iter):
             state = torch.from_numpy(np.ascontiguousarray(self.env.reset(), dtype=np.float32))
+            episode_score = 0
             for t in count():
-                action = self.select_action(state, len(self.episode_durations))
+                action = self.select_action(state, self.steps_done)
                 next_state, reward, done, _ = self.env.step(action[0, 0])
+                episode_score += reward
                 next_state = torch.from_numpy(np.ascontiguousarray(next_state, dtype=np.float32))
 
                 if done:
@@ -188,9 +195,8 @@ class DQN():
                 self.steps_done += 1
 
                 if done:
-                    score = t+1
-                    self.handle_episode_results(score)
-                    scores.append(score)
+                    self.handle_episode_results(episode_score)
+                    scores.append(episode_score)
                     break
 
             # if np.mean(scores) >= 195 and i >= 100:
@@ -205,14 +211,12 @@ if __name__ == '__main__':
     args = parse_cl_args()
 
     dqn_model = DqnNet()
-    lr=0.0003
-    dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=lr)
-    dqn_eps = EpsilonGreedy(eps_max=1, eps_min=0.01, decay=200)
-    dqn_linear_eps = LinearEpsilonGreedy(epx_max=1, eps_min=0.01, decay=0.01)
+    dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=args.l)
+    dqn_linear_eps = LinearEpsilonGreedy(epx_max=1, eps_min=0.01, decay=args.d)
     eps = dqn_linear_eps
 
-    max_iter = 1000
-    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=64, gamma=0.99, eps_greedy=eps,
+    max_iter = args.epoch
+    dqn = DQN(env=gym.make('SpaceInvaders-ram-v0'), batch_size=64, gamma=0.99, eps_greedy=eps,
               model=dqn_model, replay_memory=ReplayMemory(100000),
               optimizer=dqn_optimizer, save_episodes=args.save, skip_k=args.k, max_iter=max_iter)
 
@@ -226,7 +230,10 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.plot(x, dqn.action_values)
-    ax.set_title("\n".join(wrap(str(eps) + str(dqn) + "OPT lr: " + str(lr), 60)))
+    ax.set_title("\n".join(wrap(str(eps) + str(dqn) + "OPT lr: " + str(args.l), 60)))
 
     plt.savefig("avg_action_" + img_name)
+
+    print("---CONFIGURATION---")
+    print(args)
 

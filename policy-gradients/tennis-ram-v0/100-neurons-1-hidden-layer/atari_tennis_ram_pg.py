@@ -33,7 +33,7 @@ torch.manual_seed(args.seed)
 
 input_layer_size = 128
 output_layer_size = 18
-hidden_layer_size = 100
+hidden_layer_size = 100 
 
 
 class Policy(nn.Module):

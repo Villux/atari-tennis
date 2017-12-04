@@ -216,7 +216,7 @@ if __name__ == '__main__':
     eps = dqn_linear_eps
 
     max_iter = args.epoch
-    dqn = DQN(env=gym.make('SpaceInvaders-ram-v0'), batch_size=64, gamma=0.99, eps_greedy=eps,
+    dqn = DQN(env=gym.make('SpaceInvaders-ram-v0'), batch_size=128, gamma=0.99, eps_greedy=eps,
               model=dqn_model, replay_memory=ReplayMemory(100000),
               optimizer=dqn_optimizer, save_episodes=args.save, skip_k=args.k, max_iter=max_iter)
 

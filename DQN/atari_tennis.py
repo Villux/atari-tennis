@@ -61,10 +61,10 @@ class ReplayMemory(object):
 class DqnNet(nn.Module):
     def __init__(self):
         super(DqnNet, self).__init__()
-        self.fc1 = nn.Linear(128, 24)
+        self.fc1 = nn.Linear(128, 64)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(24, 24)
-        self.fc_output = nn.Linear(24, 6)
+        self.fc2 = nn.Linear(64, 64)
+        self.fc_output = nn.Linear(64, 6)
 
     def forward(self, x):
         hidden1 = self.relu(self.fc1(x))

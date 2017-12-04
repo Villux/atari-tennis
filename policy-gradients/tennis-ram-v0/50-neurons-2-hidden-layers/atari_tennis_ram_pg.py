@@ -162,6 +162,6 @@ while True:
 
 
 
-    if reward != 0:
-        print("Ep. {}. Frame: {}. Round finished!, reward: {}".format(episode_number, frame, reward))
+    #if reward != 0:
+        #print("Ep. {}. Frame: {}. Round finished!, reward: {}".format(episode_number, frame, reward))
 

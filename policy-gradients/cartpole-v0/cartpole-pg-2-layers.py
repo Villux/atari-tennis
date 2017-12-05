@@ -23,8 +23,10 @@ parser.add_argument('--render', action='store_true',
                     help='render the environment')
 parser.add_argument('--log_interval', type=int, default=10, metavar='N',
                     help='interval between training status logs (default: 10)')
-parser.add_argument('--neurons', type=int, default=128, metavar='N',
-                    help="Number of neurons in the hidden layer")
+parser.add_argument('--neurons1', type=int, default=128, metavar='N',
+                    help="Number of neurons in the first hidden layer")
+parser.add_argument('--neurons2', type=int, default=128, metavar='N',
+                    help="Number of neurons in the second hidden layer")
 args = parser.parse_args()
 
 
@@ -34,22 +36,25 @@ torch.manual_seed(args.seed)
 max_episodes = 5000
 
 input_layer_size = 4
-hidden_layer_size = args.neurons
+hidden_layer1_size = args.neurons1
+hidden_layer2_size = args.neurons2
 output_layer_size = 2
 
 
 class Policy(nn.Module):
     def __init__(self):
         super(Policy, self).__init__()
-        self.affine1 = nn.Linear(input_layer_size, hidden_layer_size)
-        self.affine2 = nn.Linear(hidden_layer_size, output_layer_size)
+        self.affine1 = nn.Linear(input_layer_size, hidden_layer1_size)
+        self.affine2 = nn.Linear(hidden_layer1_size, hidden_layer2_size)
+        self.affine3 = nn.Linear(hidden_layer2_size, output_layer_size)
 
         self.saved_actions = []
         self.rewards = []
 
     def forward(self, x):
         x = F.relu(self.affine1(x))
-        action_scores = self.affine2(x)
+        x = F.relu(self.affine2(x))
+        action_scores = self.affine3(x)
         return F.softmax(action_scores)
 
 
@@ -117,9 +122,9 @@ plt.scatter(episodes, timesteps, label="length", color="r")
 
 plt.ylabel("Length")
 plt.xlabel("Episodes")
-plt.title("Discount: {}. Hidden layers: 1. Hidden neurons: {}.\n Total episodes: {}".format(args.gamma, hidden_layer_size, len(episodes)))
+plt.title("Discount: {}. Hidden layers: 2. Hidden neurons: {},{}.\n Total episodes: {}".format(args.gamma, hidden_layer1_size, hidden_layer2_size, len(episodes)))
 plt.legend()
-plt.savefig("plots/cartpole_pg_1_layer_hidden_neurons_{}.png".format(hidden_layer_size))
+plt.savefig("plots/cartpole_pg_2_hidden_layers_{}_and_{}_neurons.png".format(hidden_layer_size))
 
 
 

@@ -11,7 +11,7 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='PyTorch REINFORCE example')
@@ -124,7 +124,7 @@ plt.ylabel("Length")
 plt.xlabel("Episodes")
 plt.title("Discount: {}. Hidden layers: 2. Hidden neurons: {},{}.\n Total episodes: {}".format(args.gamma, hidden_layer1_size, hidden_layer2_size, len(episodes)))
 plt.legend()
-plt.savefig("plots/cartpole_pg_2_hidden_layers_{}_and_{}_neurons.png".format(hidden_layer_size))
+plt.savefig("plots/cartpole_pg_2_hidden_layers_{}_and_{}_neurons.png".format(hidden_layer1_size, hidden_layer2_size))
 
 
 

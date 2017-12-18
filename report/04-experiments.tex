@@ -27,3 +27,8 @@ Two different linear $\epsilon$-greedy strategies, equation 4 and 5, were tested
     \epsilon_{min} + (\epsilon_{max} - \epsilon_{min}) * e^{(-\frac{s}{d})} \\
     max \{\epsilon_{min},\:\frac{\epsilon_{max}}{max \{1, (sd)\}} \}
 \end{align}
+
+\subsection{Experience replay strategies}
+Essential part of DQN is experience replay. The more observations we can store the better \cite{mnih2015human}. Unfortunately storing huge amount of observations introduces memory limits and using huge minibatch sizes means very heavy computations. For this reason we experienced with different Experience replay strategies to learn which could be good enough setup for this problem.
+
+We started with dummy one that included just the last two observations. Second experience contained last 1000 observations and used 64 of those randomly. Third one stored last 100000 observations and used 64 of those randomly.

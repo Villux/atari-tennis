@@ -1,7 +1,15 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Data Analysis}{}% 2
-\BOOKMARK [1][-]{section.3}{Methods and Experiments}{}% 3
-\BOOKMARK [1][-]{section.4}{Results}{}% 4
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 5
-\BOOKMARK [1][-]{section.6}{Appendix A: Dataset insights}{}% 6
-\BOOKMARK [1][-]{section.7}{Appendix B: Pipeline}{}% 7
+\BOOKMARK [2][-]{subsection.1.1}{Reinforced Learning}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Q-Learning}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Deep Learning}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{OpenAI Gym}{section.1}% 5
+\BOOKMARK [1][-]{section.2}{Data Analysis}{}% 6
+\BOOKMARK [1][-]{section.3}{Methods}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Deep Q-Networks}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Policy Gradient}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Cart Pole}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Experiments}{}% 11
+\BOOKMARK [1][-]{section.5}{Results}{}% 12
+\BOOKMARK [1][-]{section.6}{Discussion}{}% 13
+\BOOKMARK [1][-]{section.7}{Appendix A: Dataset insights}{}% 14
+\BOOKMARK [1][-]{section.8}{Appendix B: Pipeline}{}% 15

@@ -1,0 +1,24 @@
+\subsection{Deep Q-Networks}
+Deep Q-networks approximate Q-function in Q-learning with neural networks. Value from the action-value function is compared to the correct one with the equation \ref{eq:qlearning}. This way network eventually learns the optimal Q-function. Backpropagation can be done after every action or after a number of iterations. The later makes the learning process smoother. \cite{mnih2015human}
+
+\begin{equation}
+    y_j = \left\{
+        \begin{array}{l}
+            r_j, \:\: if\:j + 1\:is\:terminal \\
+            r_j + \gamma \max_{a'} Q^*(\phi_{j+1},a'; \theta^*)
+        \end{array}
+    \right.
+\end{equation}
+\begin{equation}
+    \label{eq:msedqn}
+    Loss = (y_j - Q(\phi_j, a_j; \theta))^2
+\end{equation}
+
+In many environments, actions that are next to each other have a strong correlation. If the minibatches used in training would only contain correlated samples learning would be slow and even ineffective. Experience replay is a technique that solves this problem. Previous state-action pairs are stored in the memory and these pairs are used in the training randomly. This means that minibatches contain a lot of samples from different state-action pairs observed from the environment. This removes the strong correlation and makes the learning more efficient and smoother. Only requirement is that the learning algorithm is off-policy, which Q-learning is.
+
+One dilemma in reinforced learning is exploration vs exploitation. In Q-learning, the model takes the action that has the highest reward unless there’s stochasticity in the process. In DQN $\epsilon$-greedy is used for that.
+
+\subsection{Policy Gradient}
+
+\subsection{Cart Pole}
+Cart Pole environment outputs four values: cart position, cart velocity, pole velocity and pole velocity at the top. These four values are given as an input to the neural network. Network’s outputs are two values - Q-values for actions “go left” and “go right”. The maximum number of actions to take is 200. Every action is rewarded with a reward of +1.

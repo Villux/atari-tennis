@@ -11,6 +11,7 @@
 \BOOKMARK [2][-]{subsection.3.2}{-greedy strategies}{section.3}% 11
 \BOOKMARK [2][-]{subsection.3.3}{Experience replay strategies}{section.3}% 12
 \BOOKMARK [1][-]{section.4}{Results}{}% 13
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 14
-\BOOKMARK [1][-]{section.6}{Appendix A: Dataset insights}{}% 15
-\BOOKMARK [1][-]{section.7}{Appendix B: Pipeline}{}% 16
+\BOOKMARK [2][-]{subsection.4.1}{DQN with Cart Pole}{section.4}% 14
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 15
+\BOOKMARK [1][-]{section.6}{Appendix A: Dataset insights}{}% 16
+\BOOKMARK [1][-]{section.7}{Appendix B: Pipeline}{}% 17

@@ -105,3 +105,6 @@ local_*/
 
 # No DS_Store
 .DS_Store
+
+# Eclipse stuff
+.metadata/

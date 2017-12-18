@@ -60,8 +60,8 @@ class DqnNet(nn.Module):
         super(DqnNet, self).__init__()
         self.fc1 = nn.Linear(4, 24)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(24, 48)
-        self.fc_output = nn.Linear(48, 2)
+        self.fc2 = nn.Linear(24, 24)
+        self.fc_output = nn.Linear(24, 2)
 
     def forward(self, x):
         hidden1 = self.relu(self.fc1(x))
@@ -77,6 +77,18 @@ class EpsilonGreedy():
 
     def get_epsilon(self, steps):
         return self.min + (self.max - self.min) * math.exp(-1. * steps / self.decay)
+
+    def __str__(self):
+        return 'EPSILON GREEDY: min:' + str(self.min) + ' max:' + str(self.max) + ' decay:' + str(self.decay)
+
+class LinearEpsilonGreedy():
+    def __init__(self, epx_max, eps_min, decay):
+        self.max = epx_max
+        self.min = eps_min
+        self.decay = decay
+
+    def get_epsilon(self, steps):
+        return max(self.min, self.max / max(1, (steps * self.decay)))
 
     def __str__(self):
         return 'EPSILON GREEDY: min:' + str(self.min) + ' max:' + str(self.max) + ' decay:' + str(self.decay)
@@ -162,21 +174,18 @@ class DQN():
         for i in range(self.max_iter):
             state = torch.from_numpy(np.ascontiguousarray(self.env.reset(), dtype=np.float32))
             for t in count():
-                if self.skip_k and (t % self.skip_k):
-                    _, _, done, _ = self.env.step(action[0, 0])
-                else:
-                    action = self.select_action(state, len(self.episode_durations))
-                    next_state, reward, done, _ = self.env.step(action[0, 0])
-                    next_state = torch.from_numpy(np.ascontiguousarray(next_state, dtype=np.float32))
+                action = self.select_action(state, len(self.episode_durations))
+                next_state, reward, done, _ = self.env.step(action[0, 0])
+                next_state = torch.from_numpy(np.ascontiguousarray(next_state, dtype=np.float32))
 
-                    if done:
-                        next_state = None
+                if done:
+                    next_state = None
 
-                    self.replay_memory.push(state, action, next_state, Tensor([reward]))
-                    state = next_state
-                    self.optimize_model()
+                self.replay_memory.push(state, action, next_state, Tensor([reward]))
+                state = next_state
+                self.optimize_model()
 
-                    self.steps_done += 1
+                self.steps_done += 1
 
                 if done:
                     score = t+1
@@ -184,8 +193,8 @@ class DQN():
                     scores.append(score)
                     break
 
-            if np.mean(scores) >= 195 and i >= 100:
-                return i
+            # if np.mean(scores) >= 195 and i >= 100:
+            #     return i
 
 
         self.env.close()
@@ -199,9 +208,11 @@ if __name__ == '__main__':
     lr=0.0003
     dqn_optimizer = optim.Adam(dqn_model.parameters(), lr=lr)
     dqn_eps = EpsilonGreedy(eps_max=1, eps_min=0.01, decay=200)
+    dqn_linear_eps = LinearEpsilonGreedy(epx_max=1, eps_min=0.01, decay=0.01)
+    eps = dqn_linear_eps
 
     max_iter = 1000
-    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=64, gamma=0.99, eps_greedy=dqn_eps,
+    dqn = DQN(env=gym.make('CartPole-v0'), batch_size=64, gamma=0.99, eps_greedy=eps,
               model=dqn_model, replay_memory=ReplayMemory(100000),
               optimizer=dqn_optimizer, save_episodes=args.save, skip_k=args.k, max_iter=max_iter)
 
@@ -210,12 +221,12 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     x = list(range(len(dqn.episode_durations)))
     ax.plot(x, dqn.episode_durations)
-    ax.set_title("\n".join(wrap(str(dqn_eps) + str(dqn), 60)))
+    ax.set_title("\n".join(wrap(str(eps) + str(dqn), 60)))
     plt.savefig(img_name)
 
     fig, ax = plt.subplots()
     ax.plot(x, dqn.action_values)
-    ax.set_title("\n".join(wrap(str(dqn_eps) + str(dqn) + "OPT lr: " + str(lr), 60)))
+    ax.set_title("\n".join(wrap(str(eps) + str(dqn) + "OPT lr: " + str(lr), 60)))
 
     plt.savefig("avg_action_" + img_name)
 

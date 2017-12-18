@@ -11,7 +11,7 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='PyTorch REINFORCE example')

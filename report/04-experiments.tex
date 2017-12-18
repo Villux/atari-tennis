@@ -1,0 +1,34 @@
+In this section we cover different experiments that we did. With DQN we experienced with different network architectures, $\epsilon$-greedy strategies and experience replay strategies.
+
+\subsection{Different Network architectures}
+We used feedforward neural networks as our deep learning method. Input and output sizes are determin by the environment - e.g Cart Pole has 2 input values and two output values. Everything between can be altered. We decided to limit our network depth two maximum layer size of two. That meant that we experienced with networks that contained one or two layers. Neuron count in layers the second architectural thing that we altered. Three experienced architectures are listed in the table \ref{table:nn_arch}.
+\begin{table}[H]
+    \caption{Different network architectures used with DQN.}
+    \centering
+    \label{table:nn_arch}
+    \scalebox{0.7}{
+        \begin{tabular}{lll}
+            \multicolumn{2}{r}{Neuron count in} \\
+            \cline{2-3}
+            Layers & 1st hidden layer & 2nd hidden layer \\
+            \hline
+            1 & 24 & \\
+            2 & 24 & 24 \\
+            2 & 24 & 48
+        \end{tabular}
+    }
+\end{table}
+In all the experiments activation function was ReLU and loss was measured with mean squered error. Also all the hyperparameters where the same.
+
+\subsection{$\epsilon$-greedy strategies}
+Two different linear $\epsilon$-greedy strategies, equation 4 and 5, were tested. In all the cases number of steps ($s$) effected the value with decay ($d$) parameter. Maximum $epsilon_{max}$ value was 1 and minimum $\epsilon_{min}$ 0.01.
+
+\begin{align}
+    \epsilon_{min} + (\epsilon_{max} - \epsilon_{min}) * e^{(-\frac{s}{d})} \\
+    max \{\epsilon_{min},\:\frac{\epsilon_{max}}{max \{1, (sd)\}} \}
+\end{align}
+
+\subsection{Experience replay strategies}
+Essential part of DQN is experience replay. The more observations we can store the better \cite{mnih2015human}. Unfortunately storing huge amount of observations introduces memory limits and using huge minibatch sizes means very heavy computations. For this reason we experienced with different Experience replay strategies to learn which could be good enough setup for this problem.
+
+We started with dummy one that included just the last two observations. Second experience contained last 1000 observations and used 64 of those randomly. Third one stored last 100000 observations and used 64 of those randomly.

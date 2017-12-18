@@ -31,12 +31,12 @@ env = gym.make('Breakout-v0')
 env.seed(args.seed)
 torch.manual_seed(args.seed)
 
-epsilon = 1.0
+#epsilon = 1.0
 
 input_layer_size = 45*72
 output_layer_size = 4
-hidden_layer1_size = 256
-hidden_layer2_size = 64
+hidden_layer1_size = 16
+hidden_layer2_size = 16
 
 
 class Policy(nn.Module):
@@ -152,6 +152,7 @@ reward_sum = 0
 previous_state = np.zeros(input_layer_size)
 episode_number = len(episodes)
 frame = 0
+batch_size = 10
 
 while True:
     if args.render: env.render()
@@ -163,24 +164,23 @@ while True:
     action = select_action(state)
     state, reward, done, _ = env.step(action[0,0])
 
-    #if done and reward == 0:
-        #reward = -1.0
 
     reward_sum += reward
     policy.rewards.append(reward)
     frame += 1
 
     if done: 
-        episode_number += 1
 
-        finish_episode()
+        episode_number += 1
+        if episode_number % batch_size == 0:
+            finish_episode()
 
         if running_reward == None:
             running_reward = reward_sum
         else:
             running_reward = 0.99 * running_reward + 0.01 * reward_sum
 
-        print("Episode: {}. Epsilon: {}. Number of frames: {}. Resetting the environment. Episode reward total was {}. Running mean: {}".format(episode_number, epsilon, frame,reward_sum, running_reward))
+        print("Episode: {}. Number of frames: {}. Resetting the environment. Episode reward total was {}. Running mean: {}".format(episode_number, frame,reward_sum, running_reward))
 
         episodes.append(episode_number)
         running_rewards.append (running_reward)

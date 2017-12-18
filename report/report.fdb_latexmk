@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex report"] 1513617539 "report.aux" "report.bbl" "report" 1513617594
+["bibtex report"] 1513617539 "report.aux" "report.bbl" "report" 1513617655
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1480098433 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "references.bib" 1513601855 1149 c4755ff223d27dd849026c75cefb8be2 ""
-  "report.aux" 1513617594 5787 6703036b277c10ac94aed29b145a2032 ""
+  "report.aux" 1513617655 5787 6703036b277c10ac94aed29b145a2032 ""
   (generated)
   "report.blg"
   "report.bbl"
-["pdflatex"] 1513617592 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513617594
+["pdflatex"] 1513617654 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513617655
   "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   "/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
@@ -127,7 +127,7 @@
   "00-abstract.tex" 1513601577 804 eb814b66903613eabc0cba1ef17d2d1c ""
   "01-introduction.tex" 1513606547 3809 7b171f5d6f6c0c380617f61648a97ec5 ""
   "03-methods.tex" 1513606521 1652 9c0824e6a0ae600a15512ca4873bbc2e ""
-  "04-experiments.tex" 1513617287 2749 53f1bbd503f9b1534a51bce44b46c1dd ""
+  "04-experiments.tex" 1513617653 2763 215b89a2f19447883efd4aaa4b67a83e ""
   "05-results.tex" 1513617592 4709 2a384f81c12f72c08c6fb872564fd16f ""
   "06-discussion.tex" 1513523759 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-a.tex" 1513523762 0 d41d8cd98f00b204e9800998ecf8427e ""
@@ -138,12 +138,12 @@
   "images/nn_24.png" 1513609830 316833 777cbf325daf30f5587396a6b3e4af6a ""
   "images/nn_24_24.png" 1513609725 397707 89684fc52c65349fcf8821f19cfa14b9 ""
   "images/nn_24_48.png" 1513609913 376447 65b96a56f20548a46bc8c6803c1b24cc ""
-  "report.aux" 1513617594 5787 6703036b277c10ac94aed29b145a2032 ""
+  "report.aux" 1513617655 5787 6703036b277c10ac94aed29b145a2032 ""
   "report.bbl" 1513617539 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
-  "report.out" 1513617594 1152 6c980a5aa17a20afed0c211dac59c5bd ""
+  "report.out" 1513617655 1152 6c980a5aa17a20afed0c211dac59c5bd ""
   "report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   (generated)
-  "report.aux"
+  "report.out"
   "report.log"
   "report.pdf"
-  "report.out"
+  "report.aux"

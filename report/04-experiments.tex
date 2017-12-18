@@ -34,4 +34,4 @@ Essential part of DQN is experience replay. The more observations we can store t
 We started with dummy one that included just the last two observations. Second experience contained last 1000 observations and used 64 of those randomly. Third one stored last 100000 observations and used 64 of those randomly.
 
 \subsection{Space Invaders}
-Space Invaders is an Atari game which can be played in OpenAI gym with RAM obserations. RAM input only contains 128 features. This means that in this environment input is 128. Output size is the number of actions, which in Space invaders is 6. No other changes are done to the DQN model.
+Space Invaders is an Atari game which can be played in OpenAI gym with RAM obserations. RAM input contains 128 features. This means that in this environment input size for the model is 128. Output size is the number of actions, which in Space invaders is 6. No other changes are done to the DQN model.

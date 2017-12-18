@@ -1,0 +1,27 @@
+In recent year biggest development steps in reinforced learning have been related to solutions that use deep learning. The major step was taken by DeepMind team that used Deep Q-Networks with Atari games. For this reason, we wanted to experience with Deep Q-Networks in Atari environments. For comparison, we implemented Policy gradient, which has been an interesting topic of research lately as well.
+
+\subsection{Reinforced Learning}
+In reinforced learning, the algorithm learns the environment by interacting with it. It’s a goal-driven way to learn - good actions are often rewarded and bad ones receive a penalty. No wonder that games are a very popular way to test reinforced learning.
+To learn the algorithm needs to evaluate its performance - how good decision it was to choose this action? In many cases, the algorithm takes multiple actions before it ends up in the terminal state. This forms multiple distinct action-state sequences that have their own rewards. Markov decision process (MDP) is an important property which means that these sequences can be used as a state. In Q-learning, another important property is that when iteration count approaches to infinity Q-function approaches the optimal Q*. This formalism is called Bellman equation. \cite{mnih2015human}
+
+\subsection{Q-Learning}
+In Q-Learning the model learns to estimate the optimal action-value function defined in function \ref{eq:qlearning}.
+\begin{equation}
+    \label{eq:qlearning}
+    Q*(s,a) = \mathbf{E}_{s'} \Big[ r + \gamma \max_{a'} Q*(s',a')|s, a \Big]
+\end{equation}
+If the environment fulfills the requirements of MDP and Bellman equation eventually when $i \rightarrow \infty$, $Q \rightarrow Q*$.
+Q-Learning is an off-policy algorithm which in this case is mandatory since experience replay is used to boost the learning. Experience replay is explained in methods and experiments section. \cite{mnih2015human} \cite{rlintroduction}
+
+\subsection{Deep Learning}
+Deep Learning is an area of machine learning that uses deep neural networks for the learning task. ”Neural networks have emerged as an important tool for classification. The recent vast research activities in neural classification have established that neural networks are a promising alternative to various conventional classification methods. The advantage of neural networks lies in the following theoretical aspects. First, neural networks are data-driven self- adaptive methods in that they can adjust themselves to the data without any explicit specification of functional or distributional form for the underlying model. Second, they are universal functional approximators in that neural networks can approximate any function with arbitrary accuracy \cite{zhang2000neural}.” This powerful way to approximate function is especially useful in reinforced learning where a system needs to learn to approximate very complex environment and finding the true optimal function can be too demanding time-wise and computationally.
+
+\subsection{OpenAI Gym}
+OpenAI Gym is a toolkit for testing and training reinforcement learning algorithms. OpenAI Gym provides “environments” or test problems that have a generalized interface that allows people to write reinforcement algorithms to try to solve those problems. OpenAI Gym includes different environments, ranging from different games (in 2D and 3D) to various algorithmic problems.
+
+One of the environment we used was Cart Pole. Cart Pole environment outputs four values: cart position, cart velocity, pole velocity and pole velocity at the top. These four values are given as an input to the neural network. Network’s outputs are two values - Q-values for actions “go left” and “go right”. The maximum number of actions to take is 200. Every action is rewarded with a reward of +1.
+
+
+
+
+

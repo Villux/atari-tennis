@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex report"] 1513612338 "report.aux" "report.bbl" "report" 1513612426
+["bibtex report"] 1513612870 "report.aux" "report.bbl" "report" 1513612871
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1480098433 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "references.bib" 1513601855 1149 c4755ff223d27dd849026c75cefb8be2 ""
-  "report.aux" 1513612426 5302 a30037c3221a790fc87735852165c9f0 ""
+  "report.aux" 1513612871 5302 f644b0ef9010b8122689ec37693c97f5 ""
   (generated)
-  "report.blg"
   "report.bbl"
-["pdflatex"] 1513612425 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513612426
+  "report.blg"
+["pdflatex"] 1513612870 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513612871
   "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   "/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
@@ -128,7 +128,7 @@
   "01-introduction.tex" 1513606547 3809 7b171f5d6f6c0c380617f61648a97ec5 ""
   "03-methods.tex" 1513606521 1652 9c0824e6a0ae600a15512ca4873bbc2e ""
   "04-experiments.tex" 1513609035 2432 6afd5a9ab6a11e53186a4b116b38a2df ""
-  "05-results.tex" 1513612425 3730 7be12ffdc6a84943bb0d7b00365d34c2 ""
+  "05-results.tex" 1513612868 4021 f8d13e5362b4e17604efc45093512707 ""
   "06-discussion.tex" 1513523759 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-a.tex" 1513523762 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-b.tex" 1513523766 0 d41d8cd98f00b204e9800998ecf8427e ""
@@ -137,12 +137,12 @@
   "images/nn_24.png" 1513609830 316833 777cbf325daf30f5587396a6b3e4af6a ""
   "images/nn_24_24.png" 1513609725 397707 89684fc52c65349fcf8821f19cfa14b9 ""
   "images/nn_24_48.png" 1513609913 376447 65b96a56f20548a46bc8c6803c1b24cc ""
-  "report.aux" 1513612426 5302 a30037c3221a790fc87735852165c9f0 ""
-  "report.bbl" 1513612338 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
-  "report.out" 1513612426 1015 260688adb13f3b0660c1915f38a1b74c ""
+  "report.aux" 1513612871 5302 f644b0ef9010b8122689ec37693c97f5 ""
+  "report.bbl" 1513612870 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
+  "report.out" 1513612871 1015 260688adb13f3b0660c1915f38a1b74c ""
   "report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   (generated)
-  "report.pdf"
-  "report.log"
   "report.aux"
   "report.out"
+  "report.log"
+  "report.pdf"

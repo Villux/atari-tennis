@@ -32,3 +32,6 @@ Two different linear $\epsilon$-greedy strategies, equation 4 and 5, were tested
 Essential part of DQN is experience replay. The more observations we can store the better \cite{mnih2015human}. Unfortunately storing huge amount of observations introduces memory limits and using huge minibatch sizes means very heavy computations. For this reason we experienced with different Experience replay strategies to learn which could be good enough setup for this problem.
 
 We started with dummy one that included just the last two observations. Second experience contained last 1000 observations and used 64 of those randomly. Third one stored last 100000 observations and used 64 of those randomly.
+
+\subsection{Space Invaders}
+Space Invaders is an Atari game which can be played in OpenAI gym with RAM obserations. RAM input only contains 128 features. This means that in this environment input is 128. Output size is the number of actions, which in Space invaders is 6. No other changes are done to the DQN model.

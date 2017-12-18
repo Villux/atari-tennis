@@ -10,8 +10,10 @@
 \BOOKMARK [2][-]{subsection.3.1}{Different Network architectures}{section.3}% 10
 \BOOKMARK [2][-]{subsection.3.2}{-greedy strategies}{section.3}% 11
 \BOOKMARK [2][-]{subsection.3.3}{Experience replay strategies}{section.3}% 12
-\BOOKMARK [1][-]{section.4}{Results}{}% 13
-\BOOKMARK [2][-]{subsection.4.1}{DQN with Cart Pole}{section.4}% 14
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 15
-\BOOKMARK [1][-]{section.6}{Appendix A: Dataset insights}{}% 16
-\BOOKMARK [1][-]{section.7}{Appendix B: Pipeline}{}% 17
+\BOOKMARK [2][-]{subsection.3.4}{Space Invaders}{section.3}% 13
+\BOOKMARK [1][-]{section.4}{Results}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{DQN with Cart Pole}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Space Invaders with DQN}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 17
+\BOOKMARK [1][-]{section.6}{Appendix A: Dataset insights}{}% 18
+\BOOKMARK [1][-]{section.7}{Appendix B: Pipeline}{}% 19

@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex report"] 1513612870 "report.aux" "report.bbl" "report" 1513613011
+["bibtex report"] 1513617539 "report.aux" "report.bbl" "report" 1513617594
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1480098433 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "references.bib" 1513601855 1149 c4755ff223d27dd849026c75cefb8be2 ""
-  "report.aux" 1513613011 5302 f644b0ef9010b8122689ec37693c97f5 ""
+  "report.aux" 1513617594 5787 6703036b277c10ac94aed29b145a2032 ""
   (generated)
-  "report.bbl"
   "report.blg"
-["pdflatex"] 1513613010 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513613011
+  "report.bbl"
+["pdflatex"] 1513617592 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513617594
   "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   "/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
@@ -127,22 +127,23 @@
   "00-abstract.tex" 1513601577 804 eb814b66903613eabc0cba1ef17d2d1c ""
   "01-introduction.tex" 1513606547 3809 7b171f5d6f6c0c380617f61648a97ec5 ""
   "03-methods.tex" 1513606521 1652 9c0824e6a0ae600a15512ca4873bbc2e ""
-  "04-experiments.tex" 1513609035 2432 6afd5a9ab6a11e53186a4b116b38a2df ""
-  "05-results.tex" 1513613010 3997 45f54c3a2594f68ab69f329ee434cae7 ""
+  "04-experiments.tex" 1513617287 2749 53f1bbd503f9b1534a51bce44b46c1dd ""
+  "05-results.tex" 1513617592 4709 2a384f81c12f72c08c6fb872564fd16f ""
   "06-discussion.tex" 1513523759 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-a.tex" 1513523762 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-b.tex" 1513523766 0 d41d8cd98f00b204e9800998ecf8427e ""
   "images/e-greedy.png" 1513611376 307747 f1dc963d2d043b7164f0b1de77068573 ""
   "images/experience_replay.png" 1513611965 331699 e30bbd49eda5a9743d61edab78017245 ""
+  "images/figure_space.png" 1512416808 72565 98541e6c34fa7020fc25c5ed7d2f717d ""
   "images/nn_24.png" 1513609830 316833 777cbf325daf30f5587396a6b3e4af6a ""
   "images/nn_24_24.png" 1513609725 397707 89684fc52c65349fcf8821f19cfa14b9 ""
   "images/nn_24_48.png" 1513609913 376447 65b96a56f20548a46bc8c6803c1b24cc ""
-  "report.aux" 1513613011 5302 f644b0ef9010b8122689ec37693c97f5 ""
-  "report.bbl" 1513612870 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
-  "report.out" 1513613011 1015 260688adb13f3b0660c1915f38a1b74c ""
+  "report.aux" 1513617594 5787 6703036b277c10ac94aed29b145a2032 ""
+  "report.bbl" 1513617539 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
+  "report.out" 1513617594 1152 6c980a5aa17a20afed0c211dac59c5bd ""
   "report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   (generated)
-  "report.out"
-  "report.log"
   "report.aux"
+  "report.log"
   "report.pdf"
+  "report.out"

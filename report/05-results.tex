@@ -55,3 +55,15 @@ Best $\epsilon$-greedy strategy was achieved with the formula 5 that had the dec
 \end{figure}
 
 Best results for Cart Pole where achieved with neural network that had two layers with 24 neurons. Formula 5 was used for $\epsilon$-greedy strategy with decay paramater of 0.1. Experience replay that helped the learning the most had memory size of 100000 and batch size of 64.
+
+\subsection{Space Invaders with DQN}
+Results were optimistic from Cart Pole environment. For that reason we tried Space Invaders with similar setup. Unfortunately results were not that good. It seems that algorithm is not able to learn the environment. After 400 episodes results they pretty much the same like we can see from the figure \ref{fig:figure_space}. It's pretty hard to see from the picture, but in the beginning average reward increases a bit, but stays steady after that.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/figure_space.png}
+    \caption{
+    Episode rewards from Space Invaders when played with DQN.
+    }
+    \label{fig:figure_space}
+\end{figure}

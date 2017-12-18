@@ -292,6 +292,9 @@ INPUT ./images/experience_replay.png
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/vf/public/mathpazo/zplmr7m.vf
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
+INPUT images/figure_space.png
+INPUT ./images/figure_space.png
+INPUT ./images/figure_space.png
 INPUT 06-discussion.tex
 INPUT 06-discussion.tex
 INPUT report.bbl

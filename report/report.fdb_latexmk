@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex report"] 1513605485 "report.aux" "report.bbl" "report" 1513605572
+["bibtex report"] 1513607491 "report.aux" "report.bbl" "report" 1513608628
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1480098433 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "references.bib" 1513601855 1149 c4755ff223d27dd849026c75cefb8be2 ""
-  "report.aux" 1513605572 2900 41df5af7913e9c164151894620b507c9 ""
+  "report.aux" 1513608628 3197 b705eef4e36a8f27c230b68a6aa7c03a ""
   (generated)
-  "report.blg"
   "report.bbl"
-["pdflatex"] 1513605572 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513605572
-  "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" 1513605329 3818 a071b19e4b65d26b1424ca8bffc572f4 ""
+  "report.blg"
+["pdflatex"] 1513608627 "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" "report.pdf" "report" 1513608628
+  "/Users/villetoiviainen/Documents/dev/atari-tennis/report/report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   "/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm" 1480098688 2532 9ad73cf4dd2173a847f2a5f5608e0b9a ""
@@ -125,20 +125,19 @@
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1505377901 4129592 70c592062f74c00630364be882d21a27 ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
   "00-abstract.tex" 1513601577 804 eb814b66903613eabc0cba1ef17d2d1c ""
-  "01-introduction.tex" 1513604290 3476 c66215df654a42e7f530a8139f954949 ""
-  "02-data-analysis.tex" 1513523748 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "03-methods.tex" 1513605499 2039 b1786259760cc6b40759a74924458dfd ""
-  "04-experiments.tex" 1513605571 185 eaad744e70b698d2bd618e5e282d6f55 ""
+  "01-introduction.tex" 1513606547 3809 7b171f5d6f6c0c380617f61648a97ec5 ""
+  "03-methods.tex" 1513606521 1652 9c0824e6a0ae600a15512ca4873bbc2e ""
+  "04-experiments.tex" 1513608627 1778 aec9298e115fe800bae9aaf9cde3083f ""
   "05-results.tex" 1513523755 0 d41d8cd98f00b204e9800998ecf8427e ""
   "06-discussion.tex" 1513523759 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-a.tex" 1513523762 0 d41d8cd98f00b204e9800998ecf8427e ""
   "appendix-b.tex" 1513523766 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "report.aux" 1513605572 2900 41df5af7913e9c164151894620b507c9 ""
-  "report.bbl" 1513605486 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
-  "report.out" 1513605572 828 e22acedc92ef661290828c378c2bbe49 ""
-  "report.tex" 1513605329 3818 a071b19e4b65d26b1424ca8bffc572f4 ""
+  "report.aux" 1513608628 3197 b705eef4e36a8f27c230b68a6aa7c03a ""
+  "report.bbl" 1513607491 1540 fe191dfe243f0cfccb98d87589bccc3b "bibtex report"
+  "report.out" 1513608628 869 a8db2b5a807575f07fd50f8ce5ff508a ""
+  "report.tex" 1513606585 3738 ed108ba94399a051a51b4a73fd7c4a1d ""
   (generated)
-  "report.aux"
-  "report.log"
   "report.pdf"
   "report.out"
+  "report.aux"
+  "report.log"

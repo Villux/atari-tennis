@@ -1,12 +1,11 @@
 #!/bin/bash 
 
-neurons=0
+
 
 echo Starting the script 
 
-for value in {1..6} 
+for neurons in {3..200} 
 do
-	neurons=$((neurons+32))
-	echo Training the cartpool policy gradient with $neurons neurons
+	echo Training the cartPole policy gradient with $neurons neurons
 	python cartpole-pg.py --neurons $neurons --log_interval 100 
 done

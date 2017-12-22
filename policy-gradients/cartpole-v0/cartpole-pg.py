@@ -11,7 +11,7 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='PyTorch REINFORCE example')
@@ -27,6 +27,7 @@ parser.add_argument('--neurons', type=int, default=128, metavar='N',
                     help="Number of neurons in the hidden layer")
 args = parser.parse_args()
 
+print("Running the cartpole, with {} neurons and with discount rate of {}".format(args.neurons, args.gamma))
 
 env = gym.make('CartPole-v0')
 env.seed(args.seed)
@@ -88,7 +89,7 @@ running_reward = 10
 
 for i_episode in range(0, max_episodes):
     state = env.reset()
-    for t in range(10000): # Don't infinite loop while learning
+    for t in range(10000):
         action = select_action(state)
         state, reward, done, _ = env.step(action[0,0])
         if args.render:
@@ -119,7 +120,7 @@ plt.ylabel("Length")
 plt.xlabel("Episodes")
 plt.title("Discount: {}. Hidden layers: 1. Hidden neurons: {}.\n Total episodes: {}".format(args.gamma, hidden_layer_size, len(episodes)))
 plt.legend()
-plt.savefig("plots/cartpole_pg_1_layer_hidden_neurons_{}.png".format(hidden_layer_size))
+plt.savefig("plots/cartpole_pg_1_layer_hidden_neurons_{}_gamma_{}_episodes_{}.png".format(hidden_layer_size, args.gamma, len(episodes)))
 
 
 
